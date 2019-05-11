@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package simonsays;
 
-// option go_package = "symonsayspb"
+option go_package = "symonsayspb";
 
 /*
     The Simon Says service.
