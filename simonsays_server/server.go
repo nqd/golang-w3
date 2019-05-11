@@ -1,20 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"log"
 	"net"
 
 	symonsayspb "github.com/nqd/golang-w3/simonsayspb"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 type server struct{}
 
 func main() {
-	fmt.Println("Simon says hello")
+	log.Println("Simon says hello")
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
@@ -26,6 +24,22 @@ func main() {
 	}
 }
 
-func (s *server) Game(stream symonsayspb.SimonSays_GameServer) error {
-	return status.Errorf(codes.Unimplemented, "method Game not implemented")
+func (s *server) Game(stream symonsayspb.SimonSays_GameServer) (err error) {
+	// ctx := stream.Context()
+
+	req, err := stream.Recv()
+	if err != nil {
+		log.Printf("Error recieving: %v", err)
+		return err
+	}
+	log.Println(req)
+
+	player := req.GetJoin()
+	if player == nil {
+		log.Printf("Error player is nil on initial join request: %v", req)
+		err = errors.New("Player was nil on initial join request")
+		return
+	}
+
+	return
 }

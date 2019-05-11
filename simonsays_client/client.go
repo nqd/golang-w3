@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -13,7 +12,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Simon says hello client")
+	log.Println("Simon says hello client")
 	cc, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalln(err)
@@ -27,7 +26,7 @@ func main() {
 }
 
 func doBiDiStreaming(c symonsayspb.SimonSaysClient) {
-	fmt.Println("Starting to do a BiDi Streaming RPC...")
+	log.Println("Starting to do a BiDi Streaming RPC...")
 
 	// we create a stream by invoking the client
 	stream, err := c.Game(context.Background())
@@ -68,7 +67,7 @@ func doBiDiStreaming(c symonsayspb.SimonSaysClient) {
 	go func() {
 		// function to send a bunch of messages
 		for _, req := range requests {
-			fmt.Printf("Sending message: %v\n", req)
+			log.Printf("Sending message: %v\n", req)
 			stream.Send(req)
 			time.Sleep(1000 * time.Millisecond)
 		}
@@ -86,7 +85,7 @@ func doBiDiStreaming(c symonsayspb.SimonSaysClient) {
 				log.Fatalf("Error while receiving: %v", err)
 				break
 			}
-			fmt.Printf("Received: turn:%v, light:%v\n", res.GetTurn(), res.GetLightup())
+			log.Printf("Received: turn:%v, light:%v\n", res.GetTurn(), res.GetLightup())
 		}
 		close(waitc)
 	}()
