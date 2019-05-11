@@ -32,6 +32,7 @@ func (s *server) Game(stream symonsayspb.SimonSays_GameServer) (err error) {
 		log.Printf("Error recieving: %v", err)
 		return err
 	}
+	log.Println("Game function was invoked with a streaming request")
 	log.Println(req)
 
 	player := req.GetJoin()
@@ -40,6 +41,29 @@ func (s *server) Game(stream symonsayspb.SimonSays_GameServer) (err error) {
 		err = errors.New("Player was nil on initial join request")
 		return
 	}
+	// send back join request
+	joinRes := &symonsayspb.Response{
+		Event: &symonsayspb.Response_Turn{
+			Turn: symonsayspb.Response_BEGIN,
+		},
+	}
+	err = stream.SendMsg(joinRes)
+
+	req, err = stream.Recv()
+	if err != nil {
+		log.Printf("Error recieving: %v", err)
+		return err
+	}
+
+	color := req.GetPress()
+	log.Printf("Color: %v", color)
+	// send back turn request
+	colorRes := &symonsayspb.Response{
+		Event: &symonsayspb.Response_Lightup{
+			Lightup: color,
+		},
+	}
+	err = stream.SendMsg(colorRes)
 
 	return
 }

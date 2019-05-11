@@ -43,23 +43,23 @@ func doBiDiStreaming(c symonsayspb.SimonSaysClient) {
 				},
 			},
 		},
-		{
-			Event: &symonsayspb.Request_Join{
-				Join: &symonsayspb.Request_Player{
-					Id: "Jane",
-				},
-			},
-		},
+		// {
+		// 	Event: &symonsayspb.Request_Join{
+		// 		Join: &symonsayspb.Request_Player{
+		// 			Id: "Jane",
+		// 		},
+		// 	},
+		// },
 		{
 			Event: &symonsayspb.Request_Press{
 				Press: symonsayspb.Color_BLUE,
 			},
 		},
-		{
-			Event: &symonsayspb.Request_Press{
-				Press: symonsayspb.Color_GREEN,
-			},
-		},
+		// {
+		// 	Event: &symonsayspb.Request_Press{
+		// 		Press: symonsayspb.Color_GREEN,
+		// 	},
+		// },
 	}
 
 	waitc := make(chan struct{})
